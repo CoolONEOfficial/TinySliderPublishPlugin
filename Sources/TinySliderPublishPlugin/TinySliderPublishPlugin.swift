@@ -30,17 +30,17 @@ func md5(_ string: Substring) -> String {
 }
 
 public extension Plugin {
-    static func tinySlider(jsPath: String) -> Self {
+    static func tinySlider(jsPath: String, defaultConfig: Dictionary<String, Any> = [String: Any]()) -> Self {
         Plugin(name: "TinySlider") { context in
             context.markdownParser.addModifier(
-                .tinySlider(jsPath)
+                .tinySlider(jsPath, defaultConfig)
             )
         }
     }
 }
 
 public extension Modifier {
-    static func tinySlider(_ jsPath: String, items: Int? = nil) -> Self {
+    static func tinySlider(_ jsPath: String, _ defaultConfig: Dictionary<String, Any>) -> Self {
         return Modifier(target: .lists) { html, markdown in
             let regex = try! NSRegularExpression(pattern: "(\\d+).", options: .caseInsensitive)
             let lines = markdown.components(separatedBy: "\n").filter {
@@ -60,19 +60,28 @@ public extension Modifier {
             
             if lines.count > 1,
                parsedImages.count == lines.count - 1,
-               let configContent = lines.first?.firstSubstring(between: "{", and: "}") {
+               let configContent = lines.first?.firstSubstring(between: "{", and: "}"),
+               let configData = "{\(configContent)}".data(using: .utf8),
+               let configObj = try? JSONSerialization.jsonObject(with: configData, options: []) as? Dictionary<String, Any> {
+                
+                let config = configObj.merging(defaultConfig) { (current, _) in current }
+                
                 let classId = "slider-" + md5(markdown)
                 let imagesHtml = parsedImages.map { """
                     <img src="\($0.path!)"\($0.alt != nil ? " alt=\"" + $0.alt! + "\"" : "")/>
                 """ }
-
+                
+                
                 return """
                 <script type="module">
                   import {tns} from '\(jsPath)';
 
                   var slider = tns({
                     container: '.\(classId)',
-                    \(configContent)
+                    \(String(
+                        data: try! JSONSerialization.data(withJSONObject: config),
+                        encoding: .utf8
+                    )!.dropFirst().dropLast())
                   });
                 </script>
                 <div class="\(classId)" style="margin-bottom: 10px;">
