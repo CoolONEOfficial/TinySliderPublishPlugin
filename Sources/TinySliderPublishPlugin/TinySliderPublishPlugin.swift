@@ -42,7 +42,10 @@ public extension Plugin {
 public extension Modifier {
     static func tinySlider(_ jsPath: String, items: Int? = nil) -> Self {
         return Modifier(target: .lists) { html, markdown in
-            let lines = markdown.components(separatedBy: "\n")
+            let regex = try! NSRegularExpression(pattern: "(\\d+).", options: .caseInsensitive)
+            let lines = markdown.components(separatedBy: "\n").filter {
+                regex.firstMatch(in: $0, options: [], range: .init(location: 0, length: $0.count)) != nil
+            }
 
             let images = lines[1..<lines.count]
                 .compactMap { $0.firstSubstring(between: "!", and: ")") }
