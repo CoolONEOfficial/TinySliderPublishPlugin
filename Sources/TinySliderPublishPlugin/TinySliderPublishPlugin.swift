@@ -75,7 +75,7 @@ public extension Modifier {
                     \(configContent)
                   });
                 </script>
-                <div class="\(classId)">
+                <div class="\(classId)" style="margin-bottom: 10px;">
                     \(imagesHtml.joined(separator: "\n"))
                 </div>
                 """
