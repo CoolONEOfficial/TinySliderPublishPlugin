@@ -45,7 +45,8 @@ public extension Modifier {
             let lines = markdown.components(separatedBy: "\n")
 
             let images = lines[1..<lines.count]
-                .compactMap { String($0.firstSubstring(between: "!", and: ")")!) }
+                .compactMap { $0.firstSubstring(between: "!", and: ")") }
+                .map { String($0) }
             let parsedImages = images.map { image -> (path: Substring?, alt: Substring?) in
                 let startAlt = image.firstIndex(of: "(")
                 return (
