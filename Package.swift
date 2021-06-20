@@ -1,5 +1,4 @@
-// swift-tools-version:5.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version:5.4
 
 import PackageDescription
 
@@ -12,7 +11,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/johnsundell/publish.git", from: "0.1.0"),
+        .package(name: "Publish", url: "https://github.com/johnsundell/publish.git", .upToNextMinor(from: "0.8.0")),
     ],
     targets: [
         .target(

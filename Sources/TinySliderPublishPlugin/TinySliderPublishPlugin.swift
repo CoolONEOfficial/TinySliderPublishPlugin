@@ -7,27 +7,6 @@
 import Publish
 import Ink
 import Foundation
-import Foundation
-import var CommonCrypto.CC_MD5_DIGEST_LENGTH
-import func CommonCrypto.CC_MD5
-import typealias CommonCrypto.CC_LONG
-
-func md5(_ string: Substring) -> String {
-    let length = Int(CC_MD5_DIGEST_LENGTH)
-    let messageData = string.data(using:.utf8)!
-    var digestData = Data(count: length)
-
-    _ = digestData.withUnsafeMutableBytes { digestBytes -> UInt8 in
-        messageData.withUnsafeBytes { messageBytes -> UInt8 in
-            if let messageBytesBaseAddress = messageBytes.baseAddress, let digestBytesBlindMemory = digestBytes.bindMemory(to: UInt8.self).baseAddress {
-                let messageLength = CC_LONG(messageData.count)
-                CC_MD5(messageBytesBaseAddress, messageLength, digestBytesBlindMemory)
-            }
-            return 0
-        }
-    }
-    return digestData.map { String(format: "%02hhx", $0) }.joined()
-}
 
 public extension Plugin {
     static func tinySlider(jsPath: String, defaultConfig: Dictionary<String, Any> = [String: Any]()) -> Self {
@@ -66,7 +45,7 @@ public extension Modifier {
                 
                 let config = configObj.merging(defaultConfig) { (current, _) in current }
                 
-                let classId = "slider-" + md5(markdown)
+                let classId = "slider-" + String(markdown.hash)
                 let imagesHtml = parsedImages.map { """
                     <img src="\($0.path!)"\($0.alt != nil ? " alt=\"" + $0.alt! + "\"" : "")/>
                 """ }
