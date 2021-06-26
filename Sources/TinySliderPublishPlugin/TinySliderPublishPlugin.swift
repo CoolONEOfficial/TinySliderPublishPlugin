@@ -1,7 +1,5 @@
 /**
-*  Twitter plugin for Publish
-*  © 2020 Guilherme Rambo
-*  BSD-2 license, see LICENSE file for details
+*  TinySlider plugin for Publish
 */
 
 import Publish
@@ -25,6 +23,7 @@ public extension Modifier {
             let lines = markdown.components(separatedBy: "\n").filter {
                 regex.firstMatch(in: $0, options: [], range: .init(location: 0, length: $0.count)) != nil
             }
+            guard !lines.isEmpty else { return html }
 
             let images = lines[1..<lines.count]
                 .compactMap { $0.firstSubstring(between: "!", and: ")") }
@@ -63,9 +62,11 @@ public extension Modifier {
                     )!.dropFirst().dropLast())
                   });
                 </script>
+                <br />
                 <div class="\(classId)" style="margin-bottom: 10px;">
                     \(imagesHtml.joined(separator: "\n"))
                 </div>
+                <br />
                 """
             } else {
                 return html
