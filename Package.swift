@@ -1,9 +1,10 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.6
 
 import PackageDescription
 
 let package = Package(
     name: "TinySliderPublishPlugin",
+    platforms: [.macOS(.v12)],
     products: [
         .library(
             name: "TinySliderPublishPlugin",
@@ -11,7 +12,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Publish", url: "https://github.com/johnsundell/publish.git", .upToNextMinor(from: "0.9.0")),
+        .package(url: "https://github.com/johnsundell/Publish.git", from: "0.9.0"),
     ],
     targets: [
         .target(
