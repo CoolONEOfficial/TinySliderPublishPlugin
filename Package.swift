@@ -11,7 +11,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Publish", url: "https://github.com/johnsundell/publish.git", .upToNextMinor(from: "0.8.0")),
+        .package(name: "Publish", url: "https://github.com/johnsundell/publish.git", .upToNextMinor(from: "0.9.0")),
     ],
     targets: [
         .target(
