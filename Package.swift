@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "TinySliderPublishPlugin",
-    platforms: [.macOS(.v12)],
+    platforms: [.macOS(.v12), .iOS(.v13)],
     products: [
         .library(
             name: "TinySliderPublishPlugin",
